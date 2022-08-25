@@ -178,6 +178,34 @@ gcode:
     M117 Temp:{sensor.temperature} Humidity:{sensor.humidity}
 ```
 
+### The "this" Variable
+
+The `this` variable contains the name of the currently executing
+macro.  It is useful for re-using code across multiple macros.  For
+example, a debug statement can be copied and reused, without having
+to edit the name of the macro:
+
+```
+[gcode_macro A_TEST_MACRO]
+gcode:
+    M117 {this} macro was just run!
+```
+
+It can also be used to refer to the current macro for the purpose of
+setting variables:
+
+```
+[gcode_macro ANOTHER_TEST_MACRO]
+variable_done: False
+gcode:
+    {% if done %}
+    M117 {this} is done
+    {% else %}
+    M117 {this} is not done
+    SET_GCODE_VARIABLE MACRO={this} VARIABLE=done VALUE=True
+    {% endif %}
+```
+
 ## Actions
 
 There are some commands available that can alter the state of the

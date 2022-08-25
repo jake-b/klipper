@@ -181,6 +181,11 @@ class GCodeMacro:
         kwparams.update(self.template.create_template_context())
         kwparams['params'] = gcmd.get_command_parameters()
         kwparams['rawparams'] = gcmd.get_raw_command_parameters()
+
+        # If someone's config already uses `this` then don't overwrite
+        if 'this' not in kwparams:
+            kwparams['this'] = self.alias
+
         self.in_script = True
         try:
             self.template.run_gcode_from_command(kwparams)
